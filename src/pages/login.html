@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FMSTYLE | Login</title>
+    <!-- Font Awesome for the Eye Icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background-image: url("../assets/1.png"); 
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
+        }
+
+        /* =========================================
+           BALANCED FLEX LAYOUT
+           ========================================= */
+        .main-wrapper {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+            align-items: center; 
+            justify-content: space-around;
+            padding: 0 8%;
+        }
+
+        .brand-side {
+            display: flex;
+            justify-content: center;
+            flex: 1;
+            align-self: flex-start; 
+            padding-top: 12vh; /* Positioned higher up */
+        }
+
+        .form-side {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+        }
+
+        /* =========================================
+           LOGO - GLOSSY & LARGE
+           ========================================= */
+        .logo {
+            font-size: clamp(80px, 10vw, 140px); 
+            font-weight: 900;
+            letter-spacing: -6px;
+            text-transform: uppercase;
+            line-height: 1;
+            position: relative;
+            display: inline-block;
+            background: linear-gradient(to bottom, #ffc4b3 0%, #FF5E3A 45%, #ba361a 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0px 10px 20px rgba(255, 94, 58, 0.25));
+        }
+
+        .logo::after {
+            content: attr(data-text);
+            position: absolute;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            z-index: 5;
+            background: linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, 0.8) 45%, rgba(255, 255, 255, 0.8) 50%, transparent 60%);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 5s infinite linear;
+        }
+
+        @keyframes shine {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* =========================================
+           LOGIN CARD
+           ========================================= */
+        .login-card {
+            width: 100%;
+            max-width: 460px;
+            padding: 60px 45px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, #fdf4d7 0%, #d4e7e6 35%, #f1bdb5 70%, #d8d3e9 100%);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.07);
+        }
+
+        .login-card h2 {
+            color: #1a2b48;
+            text-align: center;
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 40px;
+        }
+
+        /* =========================================
+           INPUTS & EYE ICON TOGGLE
+           ========================================= */
+        .input-group {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            color: #1a2b48;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        /* Container for input and icon */
+        .password-wrapper {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 16px 50px 16px 25px; /* Extra right padding for the icon */
+            border: none;
+            border-radius: 50px;
+            background-color: #f8f9fa;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            background-color: #fff;
+            box-shadow: 0 0 0 3px rgba(255, 94, 58, 0.1);
+        }
+
+        #togglePassword {
+            position: absolute;
+            right: 20px;
+            cursor: pointer;
+            color: #1a2b48;
+            opacity: 0.6;
+            transition: opacity 0.3s;
+            font-size: 18px;
+            z-index: 3;
+        }
+
+        #togglePassword:hover {
+            opacity: 1;
+        }
+
+        /* The dark shadow smudge underneath inputs */
+        .field-shadow, .button-shadow {
+            position: absolute;
+            height: 15px;
+            width: 80%;
+            background: rgba(0, 0, 0, 0.15);
+            bottom: -6px;
+            left: 10%;
+            border-radius: 50%;
+            filter: blur(10px);
+            z-index: 1;
+        }
+
+        .button-group {
+            position: relative;
+            margin-top: 45px;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(to right, #ffdf5e, #ff8c42);
+            color: #1a2b48;
+            font-size: 22px;
+            font-weight: 900;
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn:hover { 
+            filter: brightness(1.05); 
+        }
+        
+        .login-btn:active { 
+            transform: scale(0.98); 
+        }
+
+        /* =========================================
+           RESPONSIVE
+           ========================================= */
+        @media (max-width: 850px) {
+            body {
+                overflow-y: auto;
+            }
+            
+            .main-wrapper {
+                flex-direction: column;
+                justify-content: flex-start;
+                gap: 40px;
+                padding: 60px 0;
+                overflow-y: auto;
+            }
+            
+            .brand-side { 
+                padding-top: 0; 
+                flex: none; 
+            }
+            
+            .logo { 
+                font-size: 80px; 
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <main class="main-wrapper">
+        <!-- Left Side: Branding (Positioned higher up) -->
+        <section class="brand-side">
+            <h1 class="logo" data-text="FMSTYLE">FMSTYLE</h1>
+        </section>
+
+        <!-- Right Side: Login -->
+        <section class="form-side">
+            <div class="login-card">
+                <h2>LOGIN TO YOUR ACCOUNT</h2>
+                
+                <form id="loginForm" onsubmit="login(event)">
+                    <div class="input-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" placeholder="Username" required>
+                        <div class="field-shadow"></div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="password">Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="password" placeholder="Password" required>
+                            <i class="fa-solid fa-eye" id="togglePassword"></i>
+                        </div>
+                        <div class="field-shadow"></div>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="submit" class="login-btn">LOGIN</button>
+                        <div class="button-shadow"></div>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <script src="../js/api.js"></script>
+    <script>
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#password');
+
+        togglePassword.addEventListener('click', function () {
+            // Toggle the type attribute
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            
+            // Toggle the eye icon
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+
+        async function login(e) {
+            e.preventDefault();
+
+            const username = document.getElementById("username");
+            const password = document.getElementById("password");
+
+            try {
+                const result = await apiLogin(username.value.trim(), password.value.trim());
+
+                if (!result.success) {
+                    alert(result.message || "Sai tài khoản hoặc mật khẩu");
+                    return;
+                }
+
+                // Lưu thông tin user vào localStorage
+                const userData = result.user || result;
+                localStorage.setItem("user", JSON.stringify(userData));
+
+                // Điều hướng theo role
+                if (userData.role === "admin") {
+                    window.location.href = "admin.html";
+                } else {
+                    window.location.href = "staff.html";
+                }
+            } catch (err) {
+                alert("Lỗi kết nối server: " + err.message);
+            }
+        }
+    </script>
+</body>
+</html>

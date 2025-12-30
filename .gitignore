@@ -1,0 +1,86 @@
+# Node.js & npm
+node_modules/
+npm-debug.log
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Build & Dist
+/dist
+/build
+/out
+/.next
+/.nuxt
+/.vite
+/.output
+
+# IDE & Editor
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*.swp
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# Temporary folders
+temp/
+tmp/
+*.tmp
+
+# Test results
+coverage/
+.nyc_output/
+
+# Database (nếu có file .mdf, .ldf local)
+*.mdf
+*.ldf
+*.bak
+
+# Others
+*.zip
+*.rar
+*.7z
+dump.rdb
+
+# Nếu bạn dùng nodemon
+nodemon.json
