@@ -58,7 +58,28 @@ async function apiLogin(username, password) {
 // Export PDF
 async function apiExportPDF(maHD) {
     try {
-        const response = await fetch(`${API_BASE}/hoadon/${maHD}/pdf`);
+        // Tìm id từ maHD trước
+        let idHD = null;
+        
+        // Nếu maHD là số, dùng trực tiếp
+        if (!isNaN(maHD) && parseInt(maHD) > 0) {
+            idHD = parseInt(maHD);
+        } else {
+            // Nếu là chuỗi maHD, cần tìm id
+            const ordersRes = await apiGet('hoadon');
+            if (ordersRes.success && ordersRes.data) {
+                const order = ordersRes.data.find(o => o.maHD === maHD);
+                if (order && order.id) {
+                    idHD = order.id;
+                }
+            }
+        }
+        
+        if (!idHD) {
+            return { success: false, message: 'Không tìm thấy hóa đơn với mã: ' + maHD };
+        }
+        
+        const response = await fetch(`${API_BASE}/hoadon/${idHD}/pdf`);
         if (!response.ok) {
             const error = await response.json();
             return { success: false, message: error.message || 'Lỗi khi xuất PDF' };
@@ -72,7 +93,28 @@ async function apiExportPDF(maHD) {
 // Export Excel
 async function apiExportExcel(maHD) {
     try {
-        const response = await fetch(`${API_BASE}/hoadon/${maHD}/export?format=excel`);
+        // Tìm id từ maHD trước
+        let idHD = null;
+        
+        // Nếu maHD là số, dùng trực tiếp
+        if (!isNaN(maHD) && parseInt(maHD) > 0) {
+            idHD = parseInt(maHD);
+        } else {
+            // Nếu là chuỗi maHD, cần tìm id
+            const ordersRes = await apiGet('hoadon');
+            if (ordersRes.success && ordersRes.data) {
+                const order = ordersRes.data.find(o => o.maHD === maHD);
+                if (order && order.id) {
+                    idHD = order.id;
+                }
+            }
+        }
+        
+        if (!idHD) {
+            return { success: false, message: 'Không tìm thấy hóa đơn với mã: ' + maHD };
+        }
+        
+        const response = await fetch(`${API_BASE}/hoadon/${idHD}/export?format=excel`);
         if (!response.ok) {
             const error = await response.json();
             return { success: false, message: error.message || 'Lỗi khi xuất Excel' };

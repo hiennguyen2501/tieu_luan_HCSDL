@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ Thống Quản Lý Cửa Hàng FMSTYLE</title>
+    <title>Hệ Thống Quản Lý Kho - FMSTYLE</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
 
@@ -14,55 +14,19 @@
         <div class="sidebar">
             <div class="sidebar-header">
                 <h1 data-text="FMSTYLE">FMSTYLE</h1>
-                <p>Hệ Thống Quản Lý</p>
+                <p>Hệ Thống Quản Lý Kho</p>
             </div>
             <div class="menu-item active" onclick="showPage('dashboard', this)">
                 <span class="menu-item-icon">📊</span>
                 <span>Tổng Quan</span>
             </div>
-            <div class="menu-item" onclick="showPage('vitri', this)">
-                <span class="menu-item-icon">📍</span>
-                <span>Vị Trí</span>
-            </div>
-            <div class="menu-item" onclick="showPage('phanloaikh', this)">
-                <span class="menu-item-icon">👥</span>
-                <span>Phân Loại KH</span>
-            </div>
-            <div class="menu-item" onclick="showPage('phanloaisanpham', this)">
-                <span class="menu-item-icon">📂</span>
-                <span>Phân Loại Sản Phẩm</span>
-            </div>
-            <div class="menu-item" onclick="showPage('khuyenmai', this)">
-                <span class="menu-item-icon">🎫</span>
-                <span>Khuyến Mãi</span>
-            </div>
-            <div class="menu-item" onclick="showPage('nhanvien', this)">
-                <span class="menu-item-icon">👔</span>
-                <span>Nhân Viên</span>
-            </div>
-            <div class="menu-item" onclick="showPage('khachhang', this)">
-                <span class="menu-item-icon">👤</span>
-                <span>Khách Hàng</span>
-            </div>
-            <div class="menu-item" onclick="showPage('hanghoa', this)">
-                <span class="menu-item-icon">📦</span>
-                <span>Hàng Hóa</span>
-            </div>
-            <div class="menu-item" onclick="showPage('hoadon', this)">
-                <span class="menu-item-icon">🧾</span>
-                <span>Hóa Đơn</span>
-            </div>
-            <div class="menu-item" onclick="showPage('chitiethd', this)">
-                <span class="menu-item-icon">📝</span>
-                <span>Chi Tiết Hóa Đơn</span>
-            </div>
             <div class="menu-item" onclick="showPage('phieunhap', this)">
                 <span class="menu-item-icon">📥</span>
                 <span>Phiếu Nhập Hàng</span>
             </div>
-            <div class="menu-item" onclick="showPage('nhacungcap', this)">
-                <span class="menu-item-icon">🏢</span>
-                <span>Nhà Cung Cấp</span>
+            <div class="menu-item" onclick="showPage('hanghoa', this)">
+                <span class="menu-item-icon">📦</span>
+                <span>Hàng Hóa</span>
             </div>
             <div class="menu-item" onclick="showPage('lichsu', this)">
                 <span class="menu-item-icon">📋</span>
@@ -80,8 +44,8 @@
     </div>
 
     <!-- Notification Section -->
-    <div id="notification-section" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; overflow-y: auto; padding: 20px; backdrop-filter: blur(5px);">
-        <div style="max-width: 900px; margin: 20px auto; background: white; border-radius: 16px; padding: 0; box-shadow: 0 20px 60px rgba(0,0,0,0.3); animation: modalSlideIn 0.3s ease;">
+    <div id="notification-section" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 9999; overflow-y: auto; padding: 20px; backdrop-filter: blur(5px); box-sizing: border-box;">
+        <div style="max-width: 900px; width: 100%; margin: 40px auto; background: white; border-radius: 16px; padding: 0; box-shadow: 0 20px 60px rgba(0,0,0,0.3); animation: modalSlideIn 0.3s ease; position: relative;">
             <div style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%); padding: 25px; border-radius: 16px 16px 0 0; color: white;">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <h2 style="margin: 0; font-size: 22px; font-weight: 700; display: flex; align-items: center; gap: 10px;">
@@ -94,7 +58,7 @@
                 </div>
             </div>
             
-            <div style="padding: 25px;">
+            <div style="padding: 25px; max-height: calc(100vh - 200px); overflow-y: auto;">
                 <!-- Low Stock Warnings -->
                 <div id="notification-low-stock" style="margin-bottom: 25px;">
                     <div style="background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); padding: 20px; border-radius: 12px; border-left: 5px solid #ff9800; margin-bottom: 15px;">
@@ -148,8 +112,78 @@
     <script src="../js/auth.js"></script>
     <script src="../js/app.js"></script>
     <script>
-        // Check authentication
-        requireAuth('admin');
+        // Check authentication - cho phép warehouse hoặc admin
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user) {
+            window.location.href = "login.html";
+        } else if (user.role !== 'warehouse' && user.role !== 'admin') {
+            // Kiểm tra xem có phải thủ kho không (dựa vào vị trí)
+            // Nếu không phải warehouse hoặc admin, kiểm tra vị trí
+            alert('Bạn không có quyền truy cập trang này!');
+            window.location.href = "login.html";
+        }
+        
+        // Override showPage để chỉ cho phép các trang warehouse
+        const originalShowPage = window.showPage;
+        window.showPage = function(pageName, element) {
+            const allowedPages = ['dashboard', 'phieunhap', 'hanghoa', 'lichsu'];
+            if (!allowedPages.includes(pageName)) {
+                showAlert('Bạn không có quyền truy cập trang này', 'error');
+                return;
+            }
+            
+            if (originalShowPage) {
+                originalShowPage(pageName, element);
+            } else {
+                currentPage = pageName;
+                loadPage();
+            }
+        };
+        
+        // Initialize - load dashboard by default
+        window.addEventListener('DOMContentLoaded', async function() {
+            initModalClose();
+            currentPage = 'dashboard';
+            // Activate dashboard menu item
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            const dashboardMenuItem = document.querySelector('.menu-item[onclick*="dashboard"]');
+            if (dashboardMenuItem) {
+                dashboardMenuItem.classList.add('active');
+            }
+            // Load dashboard
+            await loadDashboardInitialData();
+            await loadPage();
+            // Update notification badge after loading data
+            if (typeof updateNotificationBadge === 'function') {
+                updateNotificationBadge();
+            }
+        });
+        
+        // Ensure openNotificationSection and closeNotificationSection are available
+        if (typeof openNotificationSection === 'undefined') {
+            window.openNotificationSection = function() {
+                const section = document.getElementById('notification-section');
+                if (section) {
+                    section.style.display = 'block';
+                    section.scrollTop = 0;
+                    if (typeof loadNotificationData === 'function') {
+                        loadNotificationData();
+                    }
+                }
+            };
+        }
+        
+        if (typeof closeNotificationSection === 'undefined') {
+            window.closeNotificationSection = function() {
+                const section = document.getElementById('notification-section');
+                if (section) {
+                    section.style.display = 'none';
+                }
+            };
+        }
     </script>
 </body>
 </html>
+

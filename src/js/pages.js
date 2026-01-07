@@ -106,7 +106,7 @@ const pages = {
             { name: 'idNV', label: 'Nhân Viên', type: 'select', required: true },
             { name: 'ngayNhap', label: 'Ngày Nhập', type: 'date', required: false }
         ],
-        displayFields: ['id', 'maPN', 'ngayNhap', 'tenNhanVien', 'tongTien'],
+        displayFields: ['id', 'maPN', 'ngayNhap', 'tenNhanVien', 'tenNhaCungCap', 'tongTien'],
         customActions: true
     }
 };

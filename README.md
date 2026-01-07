@@ -158,37 +158,6 @@ npm start
 - **Staff Panel**: `http://localhost:3000/src/pages/staff.html`
 - **Login**: `http://localhost:3000/src/pages/login.html`
 
-## 📁 Cấu trúc dự án
-
-```
-be-Hien-ne/
-├── server.js                 # Backend API server
-├── db.config.js             # Database configuration
-├── package.json             # Dependencies
-├── README.md                # Documentation
-├── CREATE_PHIEUNHAP.sql     # SQL script tạo bảng phiếu nhập
-│
-├── src/
-│   ├── pages/
-│   │   ├── login.html       # Trang đăng nhập
-│   │   ├── admin.html       # Trang quản trị
-│   │   └── staff.html       # Trang nhân viên bán hàng
-│   │
-│   ├── js/
-│   │   ├── api.js           # API client functions
-│   │   ├── auth.js          # Authentication logic
-│   │   ├── app.js           # Admin panel logic
-│   │   └── pages.js         # Page configurations
-│   │
-│   ├── css/
-│   │   └── style.css        # Global styles
-│   │
-│   └── assets/
-│       ├── 1.png            # Background image
-│       └── FM.jpg            # Logo
-│
-└── node_modules/            # Dependencies
-```
 
 ## 📖 Hướng dẫn sử dụng
 
@@ -432,6 +401,25 @@ CREATE TABLE CHITIET_HD(
 );
 
 GO
+
+
+CREATE TABLE LICHSU_HOATDONG (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    idNV INT NOT NULL, -- Nhân viên thực hiện
+    loaiHoatDong NVARCHAR(50) NOT NULL, -- 'Tạo hóa đơn', 'Tạo phiếu nhập', 'Sửa hóa đơn', 'Xóa hóa đơn', 'Sửa phiếu nhập', 'Tạo khách hàng', 'Sửa khách hàng', 'Tạo hàng hóa', 'Sửa hàng hóa', v.v.
+    moTa NVARCHAR(500), -- Mô tả chi tiết: "Tạo hóa đơn HD00001 với tổng tiền 500,000đ"
+    thamChieu NVARCHAR(50), -- Mã tham chiếu: maHD, maPN, maKH, maHang, v.v.
+    idThamChieu INT NULL, -- ID tham chiếu: idHD, idPN, idKH, idHang, v.v.
+    thoiGian DATETIME DEFAULT GETDATE(),
+    CONSTRAINT fk_LSHD_NV FOREIGN KEY(idNV) REFERENCES NHANVIEN(id)
+);
+GO
+
+-- Tạo index để tìm kiếm nhanh
+CREATE INDEX idx_LSHD_idNV ON LICHSU_HOATDONG(idNV);
+CREATE INDEX idx_LSHD_thoiGian ON LICHSU_HOATDONG(thoiGian DESC);
+CREATE INDEX idx_LSHD_loaiHoatDong ON LICHSU_HOATDONG(loaiHoatDong);
+GO
 -- =============================================
 -- 5. TRIGGER TỰ ĐỘNG CẬP NHẬT KHO
 -- =============================================
@@ -445,8 +433,6 @@ BEGIN
     -- Trừ kho
     UPDATE HANGHOA SET soluong = HANGHOA.soluong - i.soluong
     FROM HANGHOA JOIN inserted i ON HANGHOA.id = i.idHang;
-
-    -- Tích điểm cho khách
     UPDATE KHACHHANG SET tongchi = tongchi + i.thanhTien,
                          diemtichluy = diemtichluy + (CAST(i.thanhTien AS INT) / 100000)
     FROM KHACHHANG 
@@ -455,13 +441,29 @@ BEGIN
 END;
 GO
 
+CREATE TABLE NHACUNGCAP(
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    maNCC AS ('NCC' + RIGHT('000' + CAST(id AS VARCHAR(5)), 5)) PERSISTED,
+    tenNCC NVARCHAR(100) NOT NULL,
+    sdt VARCHAR(15),
+    email NVARCHAR(100),
+    diachi NVARCHAR(200),
+    ghiChu NVARCHAR(500),
+    trangthai BIT DEFAULT 1, -- 1: Hoạt động, 0: Ngừng hợp tác
+    ngayTao DATETIME DEFAULT GETDATE()
+);
+GO
+
+-- Bảng PHIEUNHAP
 CREATE TABLE PHIEUNHAP(
     id INT IDENTITY(1,1) PRIMARY KEY,
     maPN AS ('PN' + RIGHT('000' + CAST(id AS VARCHAR(5)), 5)) PERSISTED,
     ngayNhap DATETIME DEFAULT GETDATE(),
     idNV INT NOT NULL, -- Người nhập (quản lý hoặc thủ kho)
+    idNCC INT NULL, -- Nhà cung cấp (có thể NULL)
     tongTien MONEY DEFAULT 0,
-    CONSTRAINT fk_PN_NV FOREIGN KEY(idNV) REFERENCES NHANVIEN(id)
+    CONSTRAINT fk_PN_NV FOREIGN KEY(idNV) REFERENCES NHANVIEN(id),
+    CONSTRAINT fk_PN_NCC FOREIGN KEY(idNCC) REFERENCES NHACUNGCAP(id)
 );
 GO
 
