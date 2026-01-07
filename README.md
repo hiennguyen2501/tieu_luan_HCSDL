@@ -228,7 +228,7 @@ npm start
 - `PUT /api/khachhang/:id` - Cập nhật khách hàng
 
 ### Thống Kê
-- `GET /api/thongke/doanhthu` - Thống kê doanh thu
+- `GET /api/thongke/doanhthu` - Thống kê doanh thu 
 
 ## 🗄️ Database Schema
 
